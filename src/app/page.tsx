@@ -126,7 +126,7 @@ export default function HomePage() {
                 <div className="space-y-6">
                   {/* Step 1 */}
                   <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-lg">
+                    <div className="flex-shrink-0 w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-2xl">
                       1
                     </div>
                     <div>
@@ -139,7 +139,7 @@ export default function HomePage() {
 
                   {/* Step 2 */}
                   <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-semibold text-lg">
+                    <div className="flex-shrink-0 w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-2xl">
                       2
                     </div>
                     <div>
@@ -152,7 +152,7 @@ export default function HomePage() {
 
                   {/* Step 3 */}
                   <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold text-lg">
+                    <div className="flex-shrink-0 w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-2xl">
                       3
                     </div>
                     <div>
