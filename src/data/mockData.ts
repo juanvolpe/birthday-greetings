@@ -2,11 +2,7 @@ export interface Campaign {
   id: string;
   birthdayPerson: {
     name: string;
-    age: number;
     dateOfBirth: string;
-    email: string;
-    gender: string;
-    interests: string[];
   };
   gatherer: {
     name: string;
@@ -21,10 +17,10 @@ export interface Campaign {
 export interface Greeting {
   id: string;
   campaignId: string;
+  name: string;
+  email: string;
   message: string;
-  senderName?: string;
-  senderEmail?: string;
-  imageUrl?: string;
+  image?: string;
   createdAt: string;
 }
 
