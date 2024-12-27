@@ -102,13 +102,63 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-8">
-              {/* Inspiration Image 1 */}
-              <div className="rounded-xl overflow-hidden shadow-md">
-                <img 
-                  src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=800&auto=format&fit=crop&q=80" 
-                  alt="Celebration"
-                  className="w-full h-48 object-cover"
-                />
+              {/* How It Works */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">How It Works</h3>
+                
+                <div className="space-y-6">
+                  {/* Step 1 */}
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
+                      1
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-1">Create a Campaign</h4>
+                      <p className="text-sm text-gray-600">
+                        Start by creating a birthday campaign with the birthday person's details
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-semibold">
+                      2
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-1">Invite Friends & Family</h4>
+                      <p className="text-sm text-gray-600">
+                        Add email addresses of people you want to contribute birthday wishes
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+                      3
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-1">Collect Wishes</h4>
+                      <p className="text-sm text-gray-600">
+                        Invitees receive an email with a link to submit their birthday wishes and photos
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-semibold">
+                      4
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-1">Track Progress</h4>
+                      <p className="text-sm text-gray-600">
+                        Monitor responses and view all collected wishes in one place
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Inspirational Quote */}
@@ -120,54 +170,6 @@ export default function HomePage() {
                   "The more you praise and celebrate your life, the more there is in life to celebrate."
                 </p>
                 <p className="text-gray-500 text-sm">- Oprah Winfrey</p>
-              </div>
-
-              {/* Feature Highlights */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Connect People</h3>
-                    <p className="text-sm text-gray-500">Bring friends and family together</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Special Dates</h3>
-                    <p className="text-sm text-gray-500">Never miss important moments</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Share Joy</h3>
-                    <p className="text-sm text-gray-500">Create lasting memories</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Inspiration Image 2 */}
-              <div className="rounded-xl overflow-hidden shadow-md">
-                <img 
-                  src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&auto=format&fit=crop&q=80" 
-                  alt="Birthday celebration"
-                  className="w-full h-48 object-cover"
-                />
               </div>
             </div>
           </div>
