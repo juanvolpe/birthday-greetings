@@ -1,15 +1,11 @@
-'use client';
-
-import GreetingsClient from './client';
 import { Suspense } from 'react';
+import GreetingsClient from './client';
 
-interface PageProps {
-  params: {
-    campaignId: string;
-  };
-}
-
-export default function GreetingsPage({ params }: PageProps) {
+export default function GreetingsPage({
+  params,
+}: {
+  params: { campaignId: string };
+}) {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
