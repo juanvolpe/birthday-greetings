@@ -17,6 +17,10 @@ export default function SetupPage() {
     const formData = new FormData(event.currentTarget);
     const campaignName = formData.get('campaignName')?.toString().trim();
     const birthdayPersonName = formData.get('birthdayPersonName')?.toString().trim();
+    const birthdayPersonEmail = formData.get('birthdayPersonEmail')?.toString().trim();
+    const dateOfBirth = formData.get('dateOfBirth')?.toString().trim();
+    const gathererName = formData.get('gathererName')?.toString().trim();
+    const gathererEmail = formData.get('gathererEmail')?.toString().trim();
 
     if (!campaignName) {
       setError('Campaign name is required');
@@ -30,6 +34,30 @@ export default function SetupPage() {
       return;
     }
 
+    if (!birthdayPersonEmail) {
+      setError('Birthday person email is required');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!dateOfBirth) {
+      setError('Birthday date is required');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!gathererName) {
+      setError('Your name is required');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!gathererEmail) {
+      setError('Your email is required');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/campaigns', {
         method: 'POST',
@@ -39,11 +67,12 @@ export default function SetupPage() {
         body: JSON.stringify({
           birthdayPerson: {
             name: birthdayPersonName,
-            dateOfBirth: formData.get('dateOfBirth') || new Date().toISOString().split('T')[0],
+            dateOfBirth: dateOfBirth,
+            email: birthdayPersonEmail,
           },
           gatherer: {
-            name: formData.get('gathererName') || 'Anonymous',
-            email: formData.get('gathererEmail') || '',
+            name: gathererName,
+            email: gathererEmail,
           },
           invitedEmails: formData.get('invitedEmails')?.toString().split(',').map(email => email.trim()).filter(Boolean) || [],
           name: campaignName,
@@ -105,13 +134,28 @@ export default function SetupPage() {
               </div>
 
               <div>
+                <label htmlFor="birthdayPersonEmail" className="block text-sm font-medium text-gray-700 mb-1">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="birthdayPersonEmail"
+                  name="birthdayPersonEmail"
+                  required
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter the birthday person's email"
+                />
+              </div>
+
+              <div>
                 <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
-                  Birthday Date
+                  Birthday Date <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
                   id="dateOfBirth"
                   name="dateOfBirth"
+                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
@@ -138,12 +182,13 @@ export default function SetupPage() {
               
               <div>
                 <label htmlFor="gathererName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Your Name
+                  Your Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   id="gathererName"
                   name="gathererName"
+                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Enter your name"
                 />
@@ -151,12 +196,13 @@ export default function SetupPage() {
 
               <div>
                 <label htmlFor="gathererEmail" className="block text-sm font-medium text-gray-700 mb-1">
-                  Your Email
+                  Your Email <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   id="gathererEmail"
                   name="gathererEmail"
+                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Enter your email"
                 />
