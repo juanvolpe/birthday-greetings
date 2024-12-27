@@ -8,4 +8,8 @@ services:
       - key: NODE_ENV
         value: production
     healthCheckPath: /
-    autoDeploy: true 
+    autoDeploy: true
+    disk:
+      name: birthday-uploads
+      mountPath: /opt/uploads
+      sizeGB: 10 
