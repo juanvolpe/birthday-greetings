@@ -17,22 +17,22 @@ export default function ThankYouPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="absolute top-8 right-8 z-10"
+        className="absolute top-8 left-8 z-20"
       >
         {photoUrl ? (
-          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
+          <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-white shadow-xl">
             <Image
               src={photoUrl}
               alt="Birthday Person"
-              width={128}
-              height={128}
+              width={256}
+              height={256}
               className="object-cover w-full h-full"
               unoptimized
             />
           </div>
         ) : (
-          <div className="w-32 h-32 rounded-full bg-white shadow-xl border-4 border-white flex items-center justify-center">
-            <div className="text-2xl font-bold text-purple-600 text-center leading-tight">
+          <div className="w-64 h-64 rounded-full bg-white shadow-xl border-4 border-white flex items-center justify-center">
+            <div className="text-4xl font-bold text-purple-600 text-center leading-tight">
               {campaignName.split(' ').map((word, i) => (
                 <div key={i}>{word}</div>
               ))}
