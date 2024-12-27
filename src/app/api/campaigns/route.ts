@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
     console.log('API: Creating campaign with data:', data);
     
     // Validate required fields
-    if (!data.birthdayPerson || !data.birthdayPerson.name || !data.birthdayPerson.email) {
+    if (!data.birthdayPerson || !data.birthdayPerson.name) {
       return NextResponse.json(
-        { error: 'Birthday person name and email are required' },
+        { error: 'Birthday person name is required' },
         { status: 400 }
       );
     }
