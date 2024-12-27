@@ -5,17 +5,12 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD, // Use the App Password here
+    pass: process.env.GMAIL_PASS,
   },
 });
 
 async function sendEmail(to: string, subject: string, content: string) {
   try {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Email would be sent:', { to, subject, content });
-      return;
-    }
-
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to,
