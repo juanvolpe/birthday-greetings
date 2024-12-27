@@ -12,4 +12,4 @@ services:
     disk:
       name: birthday-uploads
       mountPath: /opt/uploads
-      sizeGB: 10 
+      sizeGB: 1 
