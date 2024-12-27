@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "campaignId": "campaign-1735278104539",
+    "message": "felciidates",
+    "senderName": "Joe",
+    "id": "greeting-1735279985700",
+    "createdAt": "2024-12-27T06:13:05.700Z"
+  },
+  {
+    "campaignId": "campaign-1735278104539",
+    "message": "gracuas!",
+    "senderName": "jhuan",
+    "id": "greeting-1735280003990",
+    "createdAt": "2024-12-27T06:13:23.990Z"
+  }
+]
