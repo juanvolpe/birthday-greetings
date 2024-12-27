@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { campaigns } from '@/data/mockData';
+import { getCampaignById, updateCampaign } from '@/utils/storage';
 
 export async function GET(request: NextRequest) {
   const campaignId = request.nextUrl.pathname.split('/').pop();
+  if (!campaignId) {
+    return NextResponse.json(
+      { error: 'Campaign ID is required' },
+      { status: 400 }
+    );
+  }
+
   try {
-    const campaign = campaigns.find(c => c.id === campaignId);
+    const campaign = await getCampaignById(campaignId);
     
     if (!campaign) {
       return NextResponse.json(
@@ -24,24 +31,25 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   const campaignId = request.nextUrl.pathname.split('/').pop();
+  if (!campaignId) {
+    return NextResponse.json(
+      { error: 'Campaign ID is required' },
+      { status: 400 }
+    );
+  }
+
   try {
     const data = await request.json();
-    const campaignIndex = campaigns.findIndex(c => c.id === campaignId);
+    const updatedCampaign = await updateCampaign(campaignId, data);
     
-    if (campaignIndex === -1) {
+    if (!updatedCampaign) {
       return NextResponse.json(
         { error: 'Campaign not found' },
         { status: 404 }
       );
     }
     
-    campaigns[campaignIndex] = {
-      ...campaigns[campaignIndex],
-      ...data,
-      updatedAt: new Date().toISOString(),
-    };
-    
-    return NextResponse.json(campaigns[campaignIndex]);
+    return NextResponse.json(updatedCampaign);
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to update campaign' },

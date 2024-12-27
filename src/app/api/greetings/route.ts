@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { greetings } from '@/data/mockData';
+import { getGreetings, createGreeting } from '@/utils/storage';
 
-export async function GET(
-  request: NextRequest
-): Promise<NextResponse> {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
     const campaignId = searchParams.get('campaignId');
-    
-    if (campaignId) {
-      const filteredGreetings = greetings.filter(g => g.campaignId === campaignId);
-      return NextResponse.json(filteredGreetings);
-    }
-    
-    return NextResponse.json(greetings);
+    const greetingsList = await getGreetings(campaignId || undefined);
+    return NextResponse.json(greetingsList);
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to fetch greetings' },
@@ -22,20 +15,10 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest
-): Promise<NextResponse> {
+export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const newGreeting = {
-      ...data,
-      id: `greeting-${greetings.length + 1}`,
-      approved: false,
-      createdAt: new Date().toISOString(),
-    };
-    
-    greetings.push(newGreeting);
-    
+    const newGreeting = await createGreeting(data);
     return NextResponse.json(newGreeting, { status: 201 });
   } catch (error) {
     return NextResponse.json(

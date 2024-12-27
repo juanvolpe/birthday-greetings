@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { campaigns } from '@/data/mockData';
+import { getCampaigns, createCampaign } from '@/utils/storage';
 
-export async function GET(
-  request: NextRequest
-): Promise<NextResponse> {
+export async function GET() {
   try {
+    const campaigns = await getCampaigns();
     return NextResponse.json(campaigns);
   } catch (error) {
     return NextResponse.json(
@@ -14,21 +13,10 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest
-): Promise<NextResponse> {
+export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const newCampaign = {
-      ...data,
-      id: `campaign-${campaigns.length + 1}`,
-      status: 'collecting',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    
-    campaigns.push(newCampaign);
-    
+    const newCampaign = await createCampaign(data);
     return NextResponse.json(newCampaign, { status: 201 });
   } catch (error) {
     return NextResponse.json(
