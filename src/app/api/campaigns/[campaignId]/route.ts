@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { campaigns } from '@/data/mockData';
 
-type Props = {
-  params: {
-    campaignId: string;
-  };
-};
-
-export async function GET(_: NextRequest, props: Props) {
+export async function GET(request: NextRequest) {
+  const campaignId = request.nextUrl.pathname.split('/').pop();
   try {
-    const campaign = campaigns.find(c => c.id === props.params.campaignId);
+    const campaign = campaigns.find(c => c.id === campaignId);
     
     if (!campaign) {
       return NextResponse.json(
@@ -27,10 +22,11 @@ export async function GET(_: NextRequest, props: Props) {
   }
 }
 
-export async function PATCH(request: NextRequest, props: Props) {
+export async function PATCH(request: NextRequest) {
+  const campaignId = request.nextUrl.pathname.split('/').pop();
   try {
     const data = await request.json();
-    const campaignIndex = campaigns.findIndex(c => c.id === props.params.campaignId);
+    const campaignIndex = campaigns.findIndex(c => c.id === campaignId);
     
     if (campaignIndex === -1) {
       return NextResponse.json(

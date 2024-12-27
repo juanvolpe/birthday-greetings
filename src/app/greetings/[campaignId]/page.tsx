@@ -10,7 +10,13 @@ interface GreetingCard {
   imageUrl?: string;
 }
 
-export default function GreetingsPage({ params }: { params: { campaignId: string } }) {
+interface PageProps {
+  params: {
+    campaignId: string;
+  };
+}
+
+export default function GreetingsPage({ params }: PageProps) {
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [greetings, setGreetings] = useState<GreetingCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
