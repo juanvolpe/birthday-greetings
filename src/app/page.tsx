@@ -8,23 +8,48 @@ export default function HomePage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+  async function fetchCampaigns() {
+    try {
+      const response = await fetch('/api/campaigns');
+      if (!response.ok) throw new Error('Failed to fetch campaigns');
+      const data = await response.json();
+      setCampaigns(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load campaigns');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchCampaigns() {
-      try {
-        const response = await fetch('/api/campaigns');
-        if (!response.ok) throw new Error('Failed to fetch campaigns');
-        const data = await response.json();
-        setCampaigns(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load campaigns');
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     fetchCampaigns();
   }, []);
+
+  async function handleDelete(campaignId: string) {
+    if (!confirm('Are you sure you want to delete this campaign? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(campaignId);
+    try {
+      const response = await fetch(`/api/campaigns/${campaignId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete campaign');
+      }
+
+      // Refresh the campaigns list
+      await fetchCampaigns();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete campaign');
+    } finally {
+      setIsDeleting(null);
+    }
+  }
 
   if (isLoading) {
     return (
@@ -54,12 +79,20 @@ export default function HomePage() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Birthday Campaigns</h1>
-        <Link
-          href="/setup"
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          Create New Campaign
-        </Link>
+        <div className="flex gap-4">
+          <Link
+            href="/admin"
+            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+            Admin
+          </Link>
+          <Link
+            href="/setup"
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Create New Campaign
+          </Link>
+        </div>
       </div>
 
       {campaigns.length === 0 ? (
@@ -102,13 +135,24 @@ export default function HomePage() {
                 <span className="text-sm text-gray-600">
                   Created by: {campaign.gatherer.name}
                 </span>
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  campaign.status === 'completed'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-blue-100 text-blue-800'
-                }`}>
-                  {campaign.status === 'completed' ? 'Completed' : 'Collecting'}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    campaign.status === 'completed'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    {campaign.status === 'completed' ? 'Completed' : 'Collecting'}
+                  </span>
+                  <button
+                    onClick={() => handleDelete(campaign.id)}
+                    disabled={isDeleting === campaign.id}
+                    className={`text-red-500 hover:text-red-700 ${
+                      isDeleting === campaign.id ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    {isDeleting === campaign.id ? 'Deleting...' : 'Delete'}
+                  </button>
+                </div>
               </div>
             </div>
           ))}

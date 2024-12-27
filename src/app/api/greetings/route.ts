@@ -3,11 +3,10 @@ import { getGreetings, createGreeting } from '@/utils/storage';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = request.nextUrl;
-    const campaignId = searchParams.get('campaignId');
-    const greetingsList = await getGreetings(campaignId || undefined);
-    return NextResponse.json(greetingsList);
+    const greetings = await getGreetings();
+    return NextResponse.json(greetings);
   } catch (error) {
+    console.error('API: Error fetching greetings:', error);
     return NextResponse.json(
       { error: 'Failed to fetch greetings' },
       { status: 500 }

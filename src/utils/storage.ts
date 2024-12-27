@@ -149,4 +149,31 @@ export async function createGreeting(greeting: Omit<Greeting, 'id' | 'createdAt'
     console.error('Error creating greeting:', error);
     throw error;
   }
+}
+
+export async function deleteCampaign(id: string): Promise<void> {
+  try {
+    const campaigns = await getCampaigns();
+    const greetings = await getGreetings();
+    
+    // Remove the campaign
+    const updatedCampaigns = campaigns.filter(c => c.id !== id);
+    
+    // Remove associated greetings
+    const updatedGreetings = greetings.filter(g => g.campaignId !== id);
+    
+    // Save updated data
+    await fs.writeFile(
+      path.join(DATA_DIR, CAMPAIGNS_FILE),
+      JSON.stringify(updatedCampaigns, null, 2)
+    );
+    
+    await fs.writeFile(
+      path.join(DATA_DIR, GREETINGS_FILE),
+      JSON.stringify(updatedGreetings, null, 2)
+    );
+  } catch (error) {
+    console.error('Error deleting campaign:', error);
+    throw error;
+  }
 } 
