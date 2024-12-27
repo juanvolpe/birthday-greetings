@@ -7,8 +7,8 @@ import { useSearchParams } from 'next/navigation';
 
 export default function ThankYouPage() {
   const searchParams = useSearchParams();
-  const photoUrl = searchParams.get('photo');
-  const campaignName = searchParams.get('name') || 'Birthday Campaign';
+  const photoUrl = searchParams?.get('photo');
+  const campaignName = searchParams?.get('name') || 'Birthday Campaign';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 relative overflow-hidden">
@@ -27,6 +27,7 @@ export default function ThankYouPage() {
               width={128}
               height={128}
               className="object-cover w-full h-full"
+              unoptimized
             />
           </div>
         ) : (
