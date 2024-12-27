@@ -1,11 +1,9 @@
 import GreetingsClient from './client';
 
-interface PageProps {
-  params: {
-    campaignId: string;
-  };
-}
-
-export default function GreetingsPage({ params }: PageProps) {
+export default async function GreetingsPage({
+  params,
+}: {
+  params: { campaignId: string };
+}) {
   return <GreetingsClient campaignId={params.campaignId} />;
 } 
