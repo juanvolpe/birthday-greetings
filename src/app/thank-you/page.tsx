@@ -17,7 +17,7 @@ export default function ThankYouPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="absolute top-8 left-8 z-20"
+        className="absolute top-8 left-0 z-20 w-1/3 flex justify-center"
       >
         {photoUrl ? (
           <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-white shadow-xl">
