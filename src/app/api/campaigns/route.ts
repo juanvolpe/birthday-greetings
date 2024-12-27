@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { campaigns } from '@/data/mockData';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     return NextResponse.json(campaigns);
   } catch (error) {
@@ -12,7 +12,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     const newCampaign = {

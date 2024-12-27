@@ -11,5 +11,5 @@ services:
     autoDeploy: true
     disk:
       name: birthday-uploads
-      mountPath: /opt/uploads
+      mountPath: /app
       sizeGB: 1 
