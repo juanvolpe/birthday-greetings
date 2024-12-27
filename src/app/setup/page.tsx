@@ -12,8 +12,16 @@ interface BirthdayPerson {
   interests: string[];
 }
 
+interface Gatherer {
+  name: string;
+  email: string;
+}
+
 export default function SetupPage() {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
   const [birthdayPerson, setBirthdayPerson] = useState<BirthdayPerson>({
     name: '',
     age: 0,
@@ -21,6 +29,11 @@ export default function SetupPage() {
     email: '',
     gender: '',
     interests: [],
+  });
+
+  const [gatherer, setGatherer] = useState<Gatherer>({
+    name: '',
+    email: '',
   });
 
   const [invitedEmails, setInvitedEmails] = useState<string[]>([]);
@@ -46,18 +59,51 @@ export default function SetupPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // TODO: Implement API call to create campaign
-    console.log('Creating campaign with:', { birthdayPerson, invitedEmails });
-    // For now, just redirect to home
-    router.push('/');
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/campaigns', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          birthdayPerson,
+          gatherer,
+          invitedEmails,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to create campaign');
+      }
+
+      const campaign = await response.json();
+      console.log('Campaign created:', campaign);
+      router.push(`/upload/${campaign.id}`);
+    } catch (err) {
+      console.error('Error creating campaign:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create campaign');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Setup Birthday Campaign</h1>
       
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
+          {error}
+        </div>
+      )}
+      
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
         <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Birthday Person Details</h3>
           <div>
             <label className="block text-sm font-medium mb-2">Name</label>
             <input
@@ -160,6 +206,31 @@ export default function SetupPage() {
         </div>
 
         <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Your Information (Campaign Gatherer)</h3>
+          <div>
+            <label className="block text-sm font-medium mb-2">Your Name</label>
+            <input
+              type="text"
+              required
+              className="w-full p-2 border rounded"
+              value={gatherer.name}
+              onChange={(e) => setGatherer({...gatherer, name: e.target.value})}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium mb-2">Your Email</label>
+            <input
+              type="email"
+              required
+              className="w-full p-2 border rounded"
+              value={gatherer.email}
+              onChange={(e) => setGatherer({...gatherer, email: e.target.value})}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-4">
           <h3 className="text-lg font-semibold">Invite Friends & Family</h3>
           <div className="flex gap-2">
             <input
@@ -196,9 +267,14 @@ export default function SetupPage() {
 
         <button
           type="submit"
-          className="w-full py-3 bg-green-500 text-white rounded hover:bg-green-600"
+          disabled={isSubmitting}
+          className={`w-full py-3 ${
+            isSubmitting 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-green-500 hover:bg-green-600'
+          } text-white rounded`}
         >
-          Create Campaign
+          {isSubmitting ? 'Creating Campaign...' : 'Create Campaign'}
         </button>
       </form>
     </div>
