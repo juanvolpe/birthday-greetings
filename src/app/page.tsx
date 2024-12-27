@@ -5,6 +5,19 @@ import Link from 'next/link';
 import { Campaign } from '@/data/mockData';
 import { motion } from 'framer-motion';
 
+// Add gradient animation styles
+const gradientAnimation = `
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+`;
+
 export default function HomePage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +97,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <style dangerouslySetInnerHTML={{ __html: gradientAnimation }} />
       <div className="flex">
         {/* Sidebar */}
         <motion.aside 
@@ -102,6 +116,9 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-8">
+              {/* Decorative Rectangle */}
+              <div className="h-2 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 animate-gradient"></div>
+
               {/* How It Works */}
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-900">How It Works</h3>
@@ -109,7 +126,7 @@ export default function HomePage() {
                 <div className="space-y-6">
                   {/* Step 1 */}
                   <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-lg">
                       1
                     </div>
                     <div>
@@ -122,7 +139,7 @@ export default function HomePage() {
 
                   {/* Step 2 */}
                   <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-semibold">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-semibold text-lg">
                       2
                     </div>
                     <div>
@@ -135,41 +152,17 @@ export default function HomePage() {
 
                   {/* Step 3 */}
                   <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold text-lg">
                       3
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-1">Collect Wishes</h4>
+                      <h4 className="font-medium text-gray-900 mb-1">Collect & Track Wishes</h4>
                       <p className="text-sm text-gray-600">
-                        Invitees receive an email with a link to submit their birthday wishes and photos
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Step 4 */}
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-semibold">
-                      4
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-1">Track Progress</h4>
-                      <p className="text-sm text-gray-600">
-                        Monitor responses and view all collected wishes in one place
+                        Invitees submit their wishes and photos, while you monitor all responses in one place
                       </p>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Inspirational Quote */}
-              <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl">
-                <svg className="w-8 h-8 text-indigo-400 mb-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-                <p className="text-gray-700 italic mb-2">
-                  "The more you praise and celebrate your life, the more there is in life to celebrate."
-                </p>
-                <p className="text-gray-500 text-sm">- Oprah Winfrey</p>
               </div>
             </div>
           </div>
