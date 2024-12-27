@@ -1,14 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Campaign, Greeting } from '@/data/mockData';
-
-interface GreetingCard {
-  id: string;
-  message: string;
-  senderName?: string;
-  imageUrl?: string;
-}
+import { Campaign, Greeting } from '@/data/mockData';
+import Link from 'next/link';
 
 interface ClientProps {
   campaignId: string;
@@ -16,7 +10,7 @@ interface ClientProps {
 
 export default function GreetingsClient({ campaignId }: ClientProps) {
   const [campaign, setCampaign] = useState<Campaign | null>(null);
-  const [greetings, setGreetings] = useState<GreetingCard[]>([]);
+  const [greetings, setGreetings] = useState<Greeting[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,10 +50,7 @@ export default function GreetingsClient({ campaignId }: ClientProps) {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your birthday wishes...</p>
-        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
       </div>
     );
   }
@@ -85,7 +76,13 @@ export default function GreetingsClient({ campaignId }: ClientProps) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">No Greetings Found</h1>
-          <p className="text-gray-600">There are no birthday wishes to display yet.</p>
+          <p className="text-gray-600 mb-4">There are no birthday wishes to display yet.</p>
+          <Link
+            href="/"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Back to Home
+          </Link>
         </div>
       </div>
     );
@@ -96,14 +93,21 @@ export default function GreetingsClient({ campaignId }: ClientProps) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
             Happy Birthday, {campaign.birthdayPerson.name}! 🎉
           </h1>
-          <p className="text-xl text-gray-600">
-            You have {greetings.length} birthday wishes from your loved ones
-          </p>
+          <Link
+            href="/"
+            className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+          >
+            Back to Home
+          </Link>
         </div>
+
+        <p className="text-xl text-gray-600 mb-8 text-center">
+          You have {greetings.length} birthday wishes from your loved ones
+        </p>
 
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
