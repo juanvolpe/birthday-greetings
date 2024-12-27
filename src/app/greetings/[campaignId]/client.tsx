@@ -69,7 +69,10 @@ export default function GreetingsClient({ campaignId }: GreetingsClientProps) {
               </div>
             )}
             <p className="text-gray-800 mb-2">{greeting.message}</p>
-            <p className="text-sm text-gray-500">From: {greeting.name || 'Anonymous'}</p>
+            <div className="text-sm">
+              <p className="font-medium text-gray-800">From: {greeting.name || 'Anonymous'}</p>
+              <p className="text-gray-500">{greeting.email}</p>
+            </div>
           </div>
         ))}
       </div>
