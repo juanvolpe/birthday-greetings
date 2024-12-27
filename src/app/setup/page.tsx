@@ -16,16 +16,9 @@ export default function SetupPage() {
 
     const formData = new FormData(event.currentTarget);
     const birthdayPersonName = formData.get('birthdayPersonName')?.toString().trim();
-    const gathererEmail = formData.get('gathererEmail')?.toString().trim();
 
     if (!birthdayPersonName) {
       setError('Birthday person name is required');
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!gathererEmail) {
-      setError('Your email is required');
       setIsSubmitting(false);
       return;
     }
@@ -44,7 +37,7 @@ export default function SetupPage() {
           },
           gatherer: {
             name: formData.get('gathererName')?.toString() || 'Anonymous',
-            email: gathererEmail,
+            email: formData.get('gathererEmail')?.toString() || '',
           },
           invitedEmails: formData.get('invitedEmails')?.toString().split(',').map(email => email.trim()).filter(Boolean) || [],
           name: formData.get('campaignName')?.toString() || `${birthdayPersonName}'s Birthday`,
@@ -164,13 +157,12 @@ export default function SetupPage() {
 
               <div>
                 <label htmlFor="gathererEmail" className="block text-sm font-medium text-gray-700 mb-1">
-                  Your Email <span className="text-red-500">*</span>
+                  Your Email
                 </label>
                 <input
                   type="email"
                   id="gathererEmail"
                   name="gathererEmail"
-                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Enter your email"
                 />

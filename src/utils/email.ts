@@ -35,31 +35,43 @@ async function sendEmail(to: string, subject: string, content: string) {
 export async function sendCampaignNotifications(campaign: Campaign) {
   const { birthdayPerson, gatherer, invitedEmails } = campaign;
   
-  // Send confirmation to the gatherer
-  await sendEmail(
-    gatherer.email,
-    'Birthday Campaign Created Successfully',
-    `
-    <h1>Your Birthday Campaign for ${birthdayPerson.name} has been created!</h1>
-    <p>You can now start collecting birthday wishes from friends and family.</p>
-    <p>We'll notify the invited people to submit their wishes.</p>
-    <p>You can track the responses here: ${process.env.NEXT_PUBLIC_BASE_URL}/status/${campaign.id}</p>
-    `
-  );
+  // Send confirmation to the gatherer only if email is provided
+  if (gatherer.email) {
+    try {
+      await sendEmail(
+        gatherer.email,
+        'Birthday Campaign Created Successfully',
+        `
+        <h1>Your Birthday Campaign for ${birthdayPerson.name} has been created!</h1>
+        <p>You can now start collecting birthday wishes from friends and family.</p>
+        <p>We'll notify the invited people to submit their wishes.</p>
+        <p>You can track the responses here: ${process.env.NEXT_PUBLIC_BASE_URL}/status/${campaign.id}</p>
+        `
+      );
+    } catch (error) {
+      console.error('Failed to send gatherer notification:', error);
+      // Continue with other notifications even if gatherer email fails
+    }
+  }
 
   // Send invitations to friends and family
   for (const email of invitedEmails) {
-    await sendEmail(
-      email,
-      `Contribute to ${birthdayPerson.name}'s Birthday Wishes`,
-      `
-      <h1>You're invited to share birthday wishes!</h1>
-      <p>${gatherer.name} has invited you to contribute to ${birthdayPerson.name}'s birthday wishes.</p>
-      <p>Click the link below to submit your message and/or photo:</p>
-      <a href="${process.env.NEXT_PUBLIC_BASE_URL}/upload/${campaign.id}">
-        Submit Your Birthday Wish
-      </a>
-      `
-    );
+    try {
+      await sendEmail(
+        email,
+        `Contribute to ${birthdayPerson.name}'s Birthday Wishes`,
+        `
+        <h1>You're invited to share birthday wishes!</h1>
+        <p>${gatherer.name} has invited you to contribute to ${birthdayPerson.name}'s birthday wishes.</p>
+        <p>Click the link below to submit your message and/or photo:</p>
+        <a href="${process.env.NEXT_PUBLIC_BASE_URL}/upload/${campaign.id}">
+          Submit Your Birthday Wish
+        </a>
+        `
+      );
+    } catch (error) {
+      console.error(`Failed to send invitation to ${email}:`, error);
+      // Continue with other emails even if one fails
+    }
   }
 } 
