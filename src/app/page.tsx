@@ -278,6 +278,12 @@ export default function HomePage() {
                         {campaign.gatherer.name}
                       </span>
                       <div className="flex items-center gap-3">
+                        <Link
+                          href={`/invite/${campaign.id}`}
+                          className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium hover:bg-green-200 transition-colors"
+                        >
+                          Add More Emails
+                        </Link>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                           campaign.status === 'completed'
                             ? 'bg-green-100 text-green-800'

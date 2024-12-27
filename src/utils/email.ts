@@ -46,7 +46,7 @@ export async function sendCampaignNotifications(campaign: Campaign) {
             .header { background: linear-gradient(135deg, #4F46E5, #7C3AED); padding: 30px 20px; border-radius: 10px; margin-bottom: 30px; }
             .header h1 { color: white; margin: 0; font-size: 24px; text-align: center; }
             .content { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-            .button { display: inline-block; background: linear-gradient(135deg, #4F46E5, #7C3AED); color: white; text-decoration: none; padding: 12px 25px; border-radius: 5px; margin-top: 20px; }
+            .button { display: inline-block; background: linear-gradient(135deg, #4F46E5, #7C3AED); color: #ffffff !important; text-decoration: none; padding: 12px 25px; border-radius: 5px; margin-top: 20px; font-weight: 500; }
             .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
           </style>
         </head>
