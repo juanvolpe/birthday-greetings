@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/nodemailer": "^6.4.17",
+    "framer-motion": "^11.15.0",
     "next": "latest",
     "nodemailer": "^6.9.16",
     "react": "latest",
