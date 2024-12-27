@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "birthdayPerson": {
+      "name": "Cosi",
+      "dateOfBirth": "2024-12-27",
+      "email": "mariaines.zelaya@gmail.com"
+    },
+    "gatherer": {
+      "name": "Juan",
+      "email": "mariaines.zelaya@gmail.com"
+    },
+    "invitedEmails": [
+      "juan.volpe902@gmail.com"
+    ],
+    "name": "Cosi's Birthday",
+    "id": "campaign-1735277685072",
+    "status": "collecting",
+    "createdAt": "2024-12-27T05:34:45.072Z",
+    "updatedAt": "2024-12-27T05:34:45.072Z"
+  },
+  {
+    "birthdayPerson": {
+      "name": "Cosi",
+      "dateOfBirth": "1990-12-12",
+      "email": "mariaines.zelaya@gmail.com"
+    },
+    "gatherer": {
+      "name": "Juan",
+      "email": "mariaines.zelaya@gmail.com"
+    },
+    "invitedEmails": [
+      "juan.volpe902@gmail.com"
+    ],
+    "name": "abuelo",
+    "id": "campaign-1735277915732",
+    "status": "collecting",
+    "createdAt": "2024-12-27T05:38:35.732Z",
+    "updatedAt": "2024-12-27T05:38:35.732Z"
+  }
+]

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Campaign } from '@/data/mockData';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Add gradient animation styles
 const gradientAnimation = `
@@ -23,6 +23,13 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [showToast, setShowToast] = useState(false);
+
+  const handleCopyLink = (link: string) => {
+    navigator.clipboard.writeText(link);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
 
   async function fetchCampaigns() {
     try {
@@ -98,6 +105,21 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       <style dangerouslySetInnerHTML={{ __html: gradientAnimation }} />
+      
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg"
+          >
+            Link copied to clipboard!
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="flex">
         {/* Sidebar */}
         <motion.aside 
@@ -277,6 +299,23 @@ export default function HomePage() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                           )}
+                        </button>
+                      </div>
+                    </div>
+                    {/* Upload Link Section */}
+                    <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex-1 text-sm text-gray-500 truncate">
+                          {`${window.location.origin}/upload/${campaign.id}`}
+                        </div>
+                        <button
+                          onClick={() => handleCopyLink(`${window.location.origin}/upload/${campaign.id}`)}
+                          className="p-2 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+                          title="Copy link"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                          </svg>
                         </button>
                       </div>
                     </div>
