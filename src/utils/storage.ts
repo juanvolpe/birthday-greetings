@@ -3,7 +3,7 @@ import path from 'path';
 import { Campaign, Greeting } from '@/data/mockData';
 
 const DATA_DIR = process.env.NODE_ENV === 'production' 
-  ? '/app/data'  // Render disk mount path
+  ? '/app'  // Render disk mount path
   : path.join(process.cwd(), 'data');
 
 const CAMPAIGNS_FILE = 'campaigns.json';
