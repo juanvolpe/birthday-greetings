@@ -15,39 +15,11 @@ export default function SetupPage() {
     setError(null);
 
     const formData = new FormData(event.currentTarget);
-    const campaignName = formData.get('campaignName')?.toString().trim();
     const birthdayPersonName = formData.get('birthdayPersonName')?.toString().trim();
-    const birthdayPersonEmail = formData.get('birthdayPersonEmail')?.toString().trim();
-    const dateOfBirth = formData.get('dateOfBirth')?.toString().trim();
-    const gathererName = formData.get('gathererName')?.toString().trim();
     const gathererEmail = formData.get('gathererEmail')?.toString().trim();
-
-    if (!campaignName) {
-      setError('Campaign name is required');
-      setIsSubmitting(false);
-      return;
-    }
 
     if (!birthdayPersonName) {
       setError('Birthday person name is required');
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!birthdayPersonEmail) {
-      setError('Birthday person email is required');
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!dateOfBirth) {
-      setError('Birthday date is required');
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!gathererName) {
-      setError('Your name is required');
       setIsSubmitting(false);
       return;
     }
@@ -67,15 +39,15 @@ export default function SetupPage() {
         body: JSON.stringify({
           birthdayPerson: {
             name: birthdayPersonName,
-            dateOfBirth: dateOfBirth,
-            email: birthdayPersonEmail,
+            dateOfBirth: formData.get('dateOfBirth')?.toString() || new Date().toISOString().split('T')[0],
+            email: formData.get('birthdayPersonEmail')?.toString() || '',
           },
           gatherer: {
-            name: gathererName,
+            name: formData.get('gathererName')?.toString() || 'Anonymous',
             email: gathererEmail,
           },
           invitedEmails: formData.get('invitedEmails')?.toString().split(',').map(email => email.trim()).filter(Boolean) || [],
-          name: campaignName,
+          name: formData.get('campaignName')?.toString() || `${birthdayPersonName}'s Birthday`,
         }),
       });
 
@@ -135,13 +107,12 @@ export default function SetupPage() {
 
               <div>
                 <label htmlFor="birthdayPersonEmail" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email <span className="text-red-500">*</span>
+                  Email
                 </label>
                 <input
                   type="email"
                   id="birthdayPersonEmail"
                   name="birthdayPersonEmail"
-                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Enter the birthday person's email"
                 />
@@ -149,13 +120,12 @@ export default function SetupPage() {
 
               <div>
                 <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
-                  Birthday Date <span className="text-red-500">*</span>
+                  Birthday Date
                 </label>
                 <input
                   type="date"
                   id="dateOfBirth"
                   name="dateOfBirth"
-                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
@@ -164,13 +134,12 @@ export default function SetupPage() {
             {/* Campaign Name */}
             <div>
               <label htmlFor="campaignName" className="block text-sm font-medium text-gray-700 mb-1">
-                Campaign Name <span className="text-red-500">*</span>
+                Campaign Name
               </label>
               <input
                 type="text"
                 id="campaignName"
                 name="campaignName"
-                required
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 placeholder="Enter a name for this campaign"
               />
@@ -182,13 +151,12 @@ export default function SetupPage() {
               
               <div>
                 <label htmlFor="gathererName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Your Name <span className="text-red-500">*</span>
+                  Your Name
                 </label>
                 <input
                   type="text"
                   id="gathererName"
                   name="gathererName"
-                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Enter your name"
                 />
