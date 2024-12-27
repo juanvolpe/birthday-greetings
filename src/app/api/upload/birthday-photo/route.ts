@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
+import { existsSync } from 'fs';
 
 export async function POST(request: Request) {
   try {
@@ -20,11 +21,19 @@ export async function POST(request: Request) {
 
     // Ensure the public/uploads directory exists
     const uploadDir = join(process.cwd(), 'public/uploads');
-    await writeFile(join(uploadDir, `birthday-person-${campaignId}.jpg`), buffer);
+    if (!existsSync(uploadDir)) {
+      await mkdir(uploadDir, { recursive: true });
+    }
+
+    const fileName = `birthday-person-${campaignId}.jpg`;
+    const filePath = join(uploadDir, fileName);
+    await writeFile(filePath, buffer);
+
+    console.log('Photo saved successfully:', filePath);
 
     return NextResponse.json({ 
       success: true,
-      photoUrl: `/uploads/birthday-person-${campaignId}.jpg`
+      photoUrl: `/uploads/${fileName}`
     });
   } catch (error) {
     console.error('Error uploading file:', error);
