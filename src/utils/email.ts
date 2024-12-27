@@ -1,29 +1,35 @@
 import { Campaign } from '@/data/mockData';
+import nodemailer from 'nodemailer';
 
-// In a real app, replace with your email service provider (SendGrid, AWS SES, etc.)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD, // Use the App Password here
+  },
+});
+
 async function sendEmail(to: string, subject: string, content: string) {
-  // For development, just log the email
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('Email would be sent:', { to, subject, content });
-    return;
-  }
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Email would be sent:', { to, subject, content });
+      return;
+    }
 
-  // TODO: Implement real email sending
-  // Example with SendGrid:
-  // const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     personalizations: [{ to: [{ email: to }] }],
-  //     from: { email: process.env.FROM_EMAIL },
-  //     subject,
-  //     content: [{ type: 'text/html', value: content }],
-  //   }),
-  // });
-  // return response.ok;
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to,
+      subject,
+      html: content,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent:', info.messageId);
+    return info;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
 }
 
 export async function sendCampaignNotifications(campaign: Campaign) {
@@ -37,6 +43,7 @@ export async function sendCampaignNotifications(campaign: Campaign) {
     <h1>Your Birthday Campaign for ${birthdayPerson.name} has been created!</h1>
     <p>You can now start collecting birthday wishes from friends and family.</p>
     <p>We'll notify the invited people to submit their wishes.</p>
+    <p>You can track the responses here: ${process.env.NEXT_PUBLIC_BASE_URL}/status/${campaign.id}</p>
     `
   );
 
