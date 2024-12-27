@@ -36,5 +36,24 @@
     "status": "collecting",
     "createdAt": "2024-12-27T05:38:35.732Z",
     "updatedAt": "2024-12-27T05:38:35.732Z"
+  },
+  {
+    "birthdayPerson": {
+      "name": "Cosi",
+      "dateOfBirth": "1990-11-12",
+      "email": "mariaines.zelaya@gmail.com"
+    },
+    "gatherer": {
+      "name": "Juan",
+      "email": "mariaines.zelaya@gmail.com"
+    },
+    "invitedEmails": [
+      "juan.volpe902@gmail.com"
+    ],
+    "name": "abuelo",
+    "id": "campaign-1735278104539",
+    "status": "collecting",
+    "createdAt": "2024-12-27T05:41:44.539Z",
+    "updatedAt": "2024-12-27T05:41:44.539Z"
   }
 ]
