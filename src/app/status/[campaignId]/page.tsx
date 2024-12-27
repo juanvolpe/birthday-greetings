@@ -9,7 +9,7 @@ interface ResponseStatus {
   hasResponded: boolean;
   includedPicture: boolean;
   isInvited: boolean;
-  senderName?: string;
+  name?: string;
 }
 
 export default function CampaignStatusPage({
@@ -51,7 +51,7 @@ export default function CampaignStatusPage({
 
         // Update with responses
         greetings.forEach((greeting) => {
-          const email = greeting.senderEmail || 'unknown';
+          const email = greeting.email;
           const existing = statusMap.get(email) || {
             email,
             hasResponded: false,
@@ -62,8 +62,8 @@ export default function CampaignStatusPage({
           statusMap.set(email, {
             ...existing,
             hasResponded: true,
-            includedPicture: !!greeting.imageUrl,
-            senderName: greeting.senderName,
+            includedPicture: !!greeting.image,
+            name: greeting.name,
           });
         });
 
@@ -80,20 +80,22 @@ export default function CampaignStatusPage({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="p-8 rounded-2xl bg-white/50 backdrop-blur-sm shadow-xl">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent"></div>
+        </div>
       </div>
     );
   }
 
   if (error || !campaign) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">{error || 'Campaign not found'}</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="text-center p-8 rounded-2xl bg-white/50 backdrop-blur-sm shadow-xl">
+          <p className="text-red-500 mb-4 text-lg">{error || 'Campaign not found'}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Retry
           </button>
@@ -106,100 +108,116 @@ export default function CampaignStatusPage({
   const uninvitedResponses = responseStatuses.filter(status => !status.isInvited);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">
-          Campaign Status: {campaign?.birthdayPerson.name}'s Birthday
-        </h1>
-        <Link
-          href="/"
-          className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-        >
-          Back to Home
-        </Link>
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Invited Responses</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-md rounded-lg">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Picture
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {invitedResponses.map((status) => (
-                <tr key={status.email}>
-                  <td className="px-6 py-4 whitespace-nowrap">{status.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {status.senderName || '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 rounded-full text-sm ${
-                      status.hasResponded
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {status.hasResponded ? 'Completed' : 'Pending'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {status.includedPicture ? '✓' : '-'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+            Campaign Status: {campaign.birthdayPerson.name}'s Birthday
+          </h1>
+          <Link
+            href="/"
+            className="px-6 py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
+          >
+            Back to Home
+          </Link>
         </div>
-      </div>
 
-      {uninvitedResponses.length > 0 && (
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Additional Responses</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white shadow-md rounded-lg">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Picture
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {uninvitedResponses.map((status) => (
-                  <tr key={status.email}>
-                    <td className="px-6 py-4 whitespace-nowrap">{status.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {status.senderName || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {status.includedPicture ? '✓' : '-'}
-                    </td>
-                  </tr>
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Invited Responses */}
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-500">
+              <h2 className="text-xl font-semibold text-white">Invited Responses</h2>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {invitedResponses.map((status) => (
+                  <div
+                    key={status.email}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        {status.name || status.email}
+                      </p>
+                      {status.name && (
+                        <p className="text-sm text-gray-500">{status.email}</p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          status.hasResponded
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
+                        {status.hasResponded ? 'Responded' : 'Pending'}
+                      </span>
+                      {status.hasResponded && (
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            status.includedPicture
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {status.includedPicture ? 'Has Image' : 'No Image'}
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Responses */}
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="px-6 py-4 bg-gradient-to-r from-green-500 to-teal-500">
+              <h2 className="text-xl font-semibold text-white">Additional Responses</h2>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {uninvitedResponses.length === 0 ? (
+                  <p className="text-gray-500 text-center py-4">
+                    No additional responses yet
+                  </p>
+                ) : (
+                  uninvitedResponses.map((status) => (
+                    <div
+                      key={status.email}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                    >
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {status.name || status.email}
+                        </p>
+                        {status.name && (
+                          <p className="text-sm text-gray-500">{status.email}</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Responded
+                        </span>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            status.includedPicture
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {status.includedPicture ? 'Has Image' : 'No Image'}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 } 

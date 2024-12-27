@@ -49,20 +49,22 @@ export default function GreetingsClient({ campaignId }: ClientProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="p-8 rounded-2xl bg-white/50 backdrop-blur-sm shadow-xl">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent"></div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">{error}</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="text-center p-8 rounded-2xl bg-white/50 backdrop-blur-sm shadow-xl">
+          <p className="text-red-500 mb-4 text-lg">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Retry
           </button>
@@ -73,13 +75,13 @@ export default function GreetingsClient({ campaignId }: ClientProps) {
 
   if (!campaign || greetings.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="text-center p-8 rounded-2xl bg-white/50 backdrop-blur-sm shadow-xl">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">No Greetings Found</h1>
-          <p className="text-gray-600 mb-4">There are no birthday wishes to display yet.</p>
+          <p className="text-gray-600 mb-6">There are no birthday wishes to display yet.</p>
           <Link
             href="/"
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Back to Home
           </Link>
@@ -91,53 +93,51 @@ export default function GreetingsClient({ campaignId }: ClientProps) {
   const currentGreeting = greetings[currentIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
             Happy Birthday, {campaign.birthdayPerson.name}! 🎉
           </h1>
           <Link
             href="/"
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+            className="px-6 py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Back to Home
           </Link>
         </div>
 
-        <p className="text-xl text-gray-600 mb-8 text-center">
+        <p className="text-xl text-gray-600 mb-12 text-center">
           You have {greetings.length} birthday wishes from your loved ones
         </p>
 
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="p-8">
-              {currentGreeting.imageUrl && (
-                <div className="mb-6">
+              {currentGreeting.image && (
+                <div className="mb-8">
                   <img
-                    src={currentGreeting.imageUrl}
+                    src={currentGreeting.image}
                     alt="Birthday wish"
-                    className="w-full h-64 object-cover rounded-lg"
+                    className="w-full h-64 object-cover rounded-xl shadow-lg"
                   />
                 </div>
               )}
               
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <p className="text-xl text-gray-800 italic">
                   "{currentGreeting.message}"
                 </p>
-                {currentGreeting.senderName && (
-                  <p className="text-gray-600">
-                    - With love, {currentGreeting.senderName}
-                  </p>
-                )}
+                <p className="text-gray-600">
+                  - With love, {currentGreeting.name}
+                </p>
               </div>
             </div>
 
             <div className="bg-gray-50 px-8 py-4 flex items-center justify-between">
               <button
                 onClick={previousGreeting}
-                className="px-4 py-2 text-blue-600 hover:text-blue-800"
+                className="px-6 py-3 text-gray-700 hover:text-gray-900 transition-colors"
               >
                 ← Previous
               </button>
@@ -146,7 +146,7 @@ export default function GreetingsClient({ campaignId }: ClientProps) {
               </span>
               <button
                 onClick={nextGreeting}
-                className="px-4 py-2 text-blue-600 hover:text-blue-800"
+                className="px-6 py-3 text-gray-700 hover:text-gray-900 transition-colors"
               >
                 Next →
               </button>

@@ -4,64 +4,24 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-interface BirthdayPerson {
-  name: string;
-  age: number;
-  dateOfBirth: string;
-  email: string;
-  gender: string;
-  interests: string[];
-}
-
-interface Gatherer {
-  name: string;
-  email: string;
-}
-
 export default function SetupPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const [birthdayPerson, setBirthdayPerson] = useState<BirthdayPerson>({
-    name: '',
-    age: 0,
-    dateOfBirth: '',
-    email: '',
-    gender: '',
-    interests: [],
-  });
 
-  const [gatherer, setGatherer] = useState<Gatherer>({
-    name: '',
-    email: '',
-  });
-
-  const [invitedEmails, setInvitedEmails] = useState<string[]>([]);
-  const [newEmail, setNewEmail] = useState('');
-  const [interest, setInterest] = useState('');
-
-  function addEmail() {
-    if (newEmail && !invitedEmails.includes(newEmail)) {
-      setInvitedEmails([...invitedEmails, newEmail]);
-      setNewEmail('');
-    }
-  }
-
-  function addInterest() {
-    if (interest && !birthdayPerson.interests.includes(interest)) {
-      setBirthdayPerson({
-        ...birthdayPerson,
-        interests: [...birthdayPerson.interests, interest],
-      });
-      setInterest('');
-    }
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setIsSubmitting(true);
     setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const campaignName = formData.get('campaignName')?.toString().trim();
+
+    if (!campaignName) {
+      setError('Campaign name is required');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch('/api/campaigns', {
@@ -70,222 +30,155 @@ export default function SetupPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          birthdayPerson,
-          gatherer,
-          invitedEmails,
+          birthdayPerson: {
+            name: campaignName,
+            dateOfBirth: formData.get('dateOfBirth') || new Date().toISOString().split('T')[0],
+          },
+          gatherer: {
+            name: formData.get('gathererName') || 'Anonymous',
+            email: formData.get('gathererEmail') || '',
+          },
+          invitedEmails: formData.get('invitedEmails')?.toString().split(',').map(email => email.trim()).filter(Boolean) || [],
         }),
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to create campaign');
+        throw new Error('Failed to create campaign');
       }
 
-      const campaign = await response.json();
-      console.log('Campaign created:', campaign);
+      const data = await response.json();
       router.push('/');
     } catch (err) {
-      console.error('Error creating campaign:', err);
-      setError(err instanceof Error ? err.message : 'Failed to create campaign');
+      setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Setup Birthday Campaign</h1>
-        <Link
-          href="/"
-          className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-        >
-          Back to Home
-        </Link>
-      </div>
-      
-      {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
-      )}
-      
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Birthday Person Details</h3>
-          <div>
-            <label className="block text-sm font-medium mb-2">Name</label>
-            <input
-              type="text"
-              required
-              className="w-full p-2 border rounded"
-              value={birthdayPerson.name}
-              onChange={(e) => setBirthdayPerson({...birthdayPerson, name: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2">Age</label>
-            <input
-              type="number"
-              required
-              min="0"
-              className="w-full p-2 border rounded"
-              value={birthdayPerson.age || ''}
-              onChange={(e) => setBirthdayPerson({...birthdayPerson, age: parseInt(e.target.value)})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2">Date of Birth</label>
-            <input
-              type="date"
-              required
-              className="w-full p-2 border rounded"
-              value={birthdayPerson.dateOfBirth}
-              onChange={(e) => setBirthdayPerson({...birthdayPerson, dateOfBirth: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <input
-              type="email"
-              required
-              className="w-full p-2 border rounded"
-              value={birthdayPerson.email}
-              onChange={(e) => setBirthdayPerson({...birthdayPerson, email: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2">Gender</label>
-            <select
-              required
-              className="w-full p-2 border rounded"
-              value={birthdayPerson.gender}
-              onChange={(e) => setBirthdayPerson({...birthdayPerson, gender: e.target.value})}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+              Create New Campaign
+            </h1>
+            <Link
+              href="/"
+              className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
             >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
+              ← Back
+            </Link>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Interests</label>
-            <div className="flex gap-2">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Campaign Name */}
+            <div>
+              <label htmlFor="campaignName" className="block text-sm font-medium text-gray-700 mb-1">
+                Campaign Name <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
-                className="flex-1 p-2 border rounded"
-                value={interest}
-                onChange={(e) => setInterest(e.target.value)}
-                placeholder="Add an interest"
+                id="campaignName"
+                name="campaignName"
+                required
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                placeholder="Enter the birthday person's name"
               />
+            </div>
+
+            {/* Birthday Date */}
+            <div>
+              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
+                Birthday Date
+              </label>
+              <input
+                type="date"
+                id="dateOfBirth"
+                name="dateOfBirth"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              />
+            </div>
+
+            {/* Gatherer Info */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-gray-900">Your Information</h3>
+              
+              <div>
+                <label htmlFor="gathererName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  id="gathererName"
+                  name="gathererName"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="gathererEmail" className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Email
+                </label>
+                <input
+                  type="email"
+                  id="gathererEmail"
+                  name="gathererEmail"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your email"
+                />
+              </div>
+            </div>
+
+            {/* Invited Emails */}
+            <div>
+              <label htmlFor="invitedEmails" className="block text-sm font-medium text-gray-700 mb-1">
+                Invite Others (Optional)
+              </label>
+              <textarea
+                id="invitedEmails"
+                name="invitedEmails"
+                rows={3}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                placeholder="Enter email addresses separated by commas"
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                Separate multiple email addresses with commas
+              </p>
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex justify-end">
               <button
-                type="button"
-                onClick={addInterest}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                type="submit"
+                disabled={isSubmitting}
+                className={`px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg 
+                  hover:from-blue-600 hover:to-indigo-600 transform hover:scale-105 transition-all duration-200 
+                  shadow-md hover:shadow-lg ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                Add
+                {isSubmitting ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating Campaign...
+                  </span>
+                ) : (
+                  'Create Campaign'
+                )}
               </button>
             </div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {birthdayPerson.interests.map((item, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                >
-                  {item}
-                  <button
-                    type="button"
-                    className="ml-2 text-blue-600 hover:text-blue-800"
-                    onClick={() => setBirthdayPerson({
-                      ...birthdayPerson,
-                      interests: birthdayPerson.interests.filter((_, i) => i !== index)
-                    })}
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
+          </form>
         </div>
-
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Your Information (Campaign Gatherer)</h3>
-          <div>
-            <label className="block text-sm font-medium mb-2">Your Name</label>
-            <input
-              type="text"
-              required
-              className="w-full p-2 border rounded"
-              value={gatherer.name}
-              onChange={(e) => setGatherer({...gatherer, name: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2">Your Email</label>
-            <input
-              type="email"
-              required
-              className="w-full p-2 border rounded"
-              value={gatherer.email}
-              onChange={(e) => setGatherer({...gatherer, email: e.target.value})}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Invite Friends & Family</h3>
-          <div className="flex gap-2">
-            <input
-              type="email"
-              className="flex-1 p-2 border rounded"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              placeholder="Enter email address"
-            />
-            <button
-              type="button"
-              onClick={addEmail}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Add
-            </button>
-          </div>
-          
-          <div className="space-y-2">
-            {invitedEmails.map((email, index) => (
-              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                <span>{email}</span>
-                <button
-                  type="button"
-                  onClick={() => setInvitedEmails(invitedEmails.filter((_, i) => i !== index))}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-full py-3 ${
-            isSubmitting 
-              ? 'bg-gray-400 cursor-not-allowed' 
-              : 'bg-green-500 hover:bg-green-600'
-          } text-white rounded`}
-        >
-          {isSubmitting ? 'Creating Campaign...' : 'Create Campaign'}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
