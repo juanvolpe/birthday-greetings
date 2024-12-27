@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { campaigns } from '@/data/mockData';
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse> {
   try {
     return NextResponse.json(campaigns);
   } catch (error) {
@@ -12,7 +14,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest
+): Promise<NextResponse> {
   try {
     const data = await request.json();
     const newCampaign = {

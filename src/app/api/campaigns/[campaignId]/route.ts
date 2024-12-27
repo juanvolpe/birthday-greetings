@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { campaigns } from '@/data/mockData';
 
-type RouteContext = {
-  params: {
-    campaignId: string;
-  };
-};
-
 export async function GET(
-  _request: NextRequest,
-  context: RouteContext
-) {
+  request: NextRequest,
+  { params }: { params: { campaignId: string } }
+): Promise<NextResponse> {
   try {
-    const campaign = campaigns.find(c => c.id === context.params.campaignId);
+    const campaign = campaigns.find(c => c.id === params.campaignId);
     
     if (!campaign) {
       return NextResponse.json(
@@ -32,11 +26,11 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  context: RouteContext
-) {
+  { params }: { params: { campaignId: string } }
+): Promise<NextResponse> {
   try {
     const data = await request.json();
-    const campaignIndex = campaigns.findIndex(c => c.id === context.params.campaignId);
+    const campaignIndex = campaigns.findIndex(c => c.id === params.campaignId);
     
     if (campaignIndex === -1) {
       return NextResponse.json(

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { greetings } from '@/data/mockData';
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse> {
   try {
     const { searchParams } = request.nextUrl;
     const campaignId = searchParams.get('campaignId');
@@ -20,7 +22,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest
+): Promise<NextResponse> {
   try {
     const data = await request.json();
     const newGreeting = {
