@@ -3,15 +3,17 @@ export interface Campaign {
   birthdayPerson: {
     name: string;
     dateOfBirth: string;
+    email?: string;
   };
   gatherer: {
     name: string;
-    email: string;
+    email?: string;
   };
   invitedEmails: string[];
   status: 'collecting' | 'completed';
   createdAt: string;
-  updatedAt: string;
+  name?: string;
+  photoUrl?: string;
 }
 
 export interface Greeting {

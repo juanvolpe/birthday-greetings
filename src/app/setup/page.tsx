@@ -1,13 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function SetupPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [birthdayPhoto, setBirthdayPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -49,13 +53,44 @@ export default function SetupPage() {
       }
 
       const data = await response.json();
-      router.push('/');
+      
+      if (birthdayPhoto) {
+        const formData = new FormData();
+        formData.append('file', birthdayPhoto);
+        formData.append('campaignId', data.id);
+        
+        const uploadResponse = await fetch('/api/upload/birthday-photo', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload photo');
+        }
+
+        const { photoUrl } = await uploadResponse.json();
+        data.photoUrl = photoUrl;
+      }
+
+      router.push(`/thank-you?name=${encodeURIComponent(data.name || data.birthdayPerson.name)}&photo=${encodeURIComponent(data.photoUrl || '')}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setIsSubmitting(false);
     }
   }
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setBirthdayPhoto(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12">
@@ -120,6 +155,49 @@ export default function SetupPage() {
                   id="dateOfBirth"
                   name="dateOfBirth"
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Birthday Person's Photo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Birthday Person's Photo
+              </label>
+              <div className="mt-1 flex items-center space-x-4">
+                {photoPreview ? (
+                  <div className="relative w-24 h-24">
+                    <Image
+                      src={photoPreview}
+                      alt="Birthday Person Preview"
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBirthdayPhoto(null);
+                        setPhotoPreview(null);
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-24 h-24 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center cursor-pointer hover:border-purple-500"
+                  >
+                    <span className="text-gray-500">Add Photo</span>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handlePhotoChange}
+                  accept="image/*"
+                  className="hidden"
                 />
               </div>
             </div>

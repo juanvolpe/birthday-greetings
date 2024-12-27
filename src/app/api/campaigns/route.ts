@@ -18,39 +18,35 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.json();
-    console.log('API: Creating campaign with data:', data);
-    
+    const body = await request.json();
+    const { birthdayPerson, gatherer, invitedEmails, name } = body;
+
     // Validate required fields
-    if (!data.birthdayPerson || !data.birthdayPerson.name) {
+    if (!birthdayPerson?.name) {
       return NextResponse.json(
         { error: 'Birthday person name is required' },
         { status: 400 }
       );
     }
 
-    if (!data.gatherer || !data.gatherer.name || !data.gatherer.email) {
-      return NextResponse.json(
-        { error: 'Gatherer name and email are required' },
-        { status: 400 }
-      );
+    // Create campaign
+    const campaign = await createCampaign({
+      birthdayPerson,
+      gatherer,
+      invitedEmails,
+      name,
+      status: 'collecting',
+      createdAt: new Date().toISOString(),
+    });
+
+    // Send invitation emails
+    if (invitedEmails?.length > 0) {
+      await sendCampaignNotifications(campaign);
     }
 
-    const newCampaign = await createCampaign(data);
-    console.log('API: Created campaign:', newCampaign);
-
-    // Send email notifications
-    try {
-      await sendCampaignNotifications(newCampaign);
-      console.log('API: Sent campaign notifications');
-    } catch (emailError) {
-      console.error('API: Error sending notifications:', emailError);
-      // Continue even if email sending fails
-    }
-
-    return NextResponse.json(newCampaign, { status: 201 });
+    return NextResponse.json(campaign);
   } catch (error) {
-    console.error('API: Error creating campaign:', error);
+    console.error('Error creating campaign:', error);
     return NextResponse.json(
       { error: 'Failed to create campaign' },
       { status: 500 }

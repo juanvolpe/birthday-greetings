@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Campaign } from '@/data/mockData';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 // Add gradient animation styles
 const gradientAnimation = `
@@ -245,9 +246,28 @@ export default function HomePage() {
                     className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"
                   >
                     <div className="p-6">
-                      <h2 className="text-2xl font-semibold mb-2 text-gray-800">
-                        {campaign.birthdayPerson.name}'s Birthday
-                      </h2>
+                      <div className="flex justify-between items-start mb-4">
+                        <h2 className="text-2xl font-semibold text-gray-800">
+                          {campaign.birthdayPerson.name}'s Birthday
+                        </h2>
+                        {campaign.photoUrl ? (
+                          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-purple-200">
+                            <Image
+                              src={campaign.photoUrl}
+                              alt={campaign.birthdayPerson.name}
+                              width={64}
+                              height={64}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center border-2 border-purple-200">
+                            <span className="text-xl font-bold text-purple-600">
+                              {campaign.birthdayPerson.name.charAt(0)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                       <p className="text-gray-600 mb-6">
                         {new Date(campaign.birthdayPerson.dateOfBirth).toLocaleDateString(undefined, {
                           year: 'numeric',

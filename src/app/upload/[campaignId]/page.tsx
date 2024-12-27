@@ -7,6 +7,7 @@ import type { Campaign } from '@/data/mockData';
 interface UploadFormData {
   message: string;
   senderName: string;
+  senderEmail: string;
   image?: File;
 }
 
@@ -16,6 +17,7 @@ export default function UploadPage({ params }: { params: { campaignId: string } 
   const [formData, setFormData] = useState<UploadFormData>({
     message: '',
     senderName: '',
+    senderEmail: '',
   });
   const [imagePreview, setImagePreview] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,14 +55,25 @@ export default function UploadPage({ params }: { params: { campaignId: string } 
     setIsSubmitting(true);
     setError(null);
     
+    if (!formData.senderName?.trim()) {
+      setError('Please enter your name');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.senderEmail?.trim()) {
+      setError('Please enter your email');
+      setIsSubmitting(false);
+      return;
+    }
+    
     try {
-      // In a real app, you'd upload the image to a storage service first
-      // and get back a URL. For now, we'll use the preview URL
       const greetingData = {
         campaignId: params.campaignId,
         message: formData.message,
-        senderName: formData.senderName || undefined,
-        imageUrl: imagePreview || undefined,
+        name: formData.senderName.trim(),
+        email: formData.senderEmail.trim(),
+        image: imagePreview || undefined,
       };
 
       const response = await fetch('/api/greetings', {
@@ -129,13 +142,30 @@ export default function UploadPage({ params }: { params: { campaignId: string } 
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Your Name (Optional)</label>
+            <label className="block text-sm font-medium mb-2">
+              Your Name <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
+              required
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="How should we sign your message?"
+              placeholder="Enter your name"
               value={formData.senderName}
               onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Your Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              required
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Enter your email"
+              value={formData.senderEmail}
+              onChange={(e) => setFormData({ ...formData, senderEmail: e.target.value })}
             />
           </div>
 

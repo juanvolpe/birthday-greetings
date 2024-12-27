@@ -2,20 +2,20 @@
   {
     "birthdayPerson": {
       "name": "Cosi",
-      "dateOfBirth": "1990-11-12",
-      "email": "mariaines.zelaya@gmail.com"
+      "dateOfBirth": "1991-12-12",
+      "email": "juan.volpe90@gmail.com"
     },
     "gatherer": {
-      "name": "Juan",
+      "name": "Juan Volpe",
       "email": "mariaines.zelaya@gmail.com"
     },
     "invitedEmails": [
-      "juan.volpe902@gmail.com"
+      "juan.volpe903@gmail.com"
     ],
-    "name": "abuelo",
-    "id": "campaign-1735278104539",
+    "name": "Cumple Puch",
+    "id": "campaign-1735280716510",
     "status": "collecting",
-    "createdAt": "2024-12-27T05:41:44.539Z",
-    "updatedAt": "2024-12-27T05:41:44.539Z"
+    "createdAt": "2024-12-27T06:25:16.510Z",
+    "updatedAt": "2024-12-27T06:25:16.510Z"
   }
 ]
