@@ -5,6 +5,12 @@ services:
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
+      - key: GMAIL_USER
+        value: cursortest1990@gmail.com
+      - key: GMAIL_APP_PASSWORD
+        value: gwvubvxvhjfvsrog
+      - key: NEXT_PUBLIC_BASE_URL
+        value: https://birthday-greetings.onrender.com
       - key: NODE_ENV
         value: production
     healthCheckPath: /
