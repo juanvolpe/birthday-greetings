@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCampaigns, createCampaign } from '@/utils/storage';
+import { sendCampaignNotifications } from '@/utils/email';
 
 export async function GET() {
   try {
@@ -37,6 +38,16 @@ export async function POST(request: NextRequest) {
 
     const newCampaign = await createCampaign(data);
     console.log('API: Created campaign:', newCampaign);
+
+    // Send email notifications
+    try {
+      await sendCampaignNotifications(newCampaign);
+      console.log('API: Sent campaign notifications');
+    } catch (emailError) {
+      console.error('API: Error sending notifications:', emailError);
+      // Continue even if email sending fails
+    }
+
     return NextResponse.json(newCampaign, { status: 201 });
   } catch (error) {
     console.error('API: Error creating campaign:', error);
