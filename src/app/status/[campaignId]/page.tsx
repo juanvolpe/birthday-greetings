@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Campaign, Greeting } from '@/data/mockData';
+import Link from 'next/link';
 
 interface ResponseStatus {
   email: string;
@@ -106,9 +107,17 @@ export default function CampaignStatusPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">
-        Campaign Status: {campaign.birthdayPerson.name}'s Birthday
-      </h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">
+          Campaign Status: {campaign?.birthdayPerson.name}'s Birthday
+        </h1>
+        <Link
+          href="/"
+          className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+        >
+          Back to Home
+        </Link>
+      </div>
 
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Invited Responses</h2>

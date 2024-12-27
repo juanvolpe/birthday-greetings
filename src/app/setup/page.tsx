@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface BirthdayPerson {
   name: string;
@@ -82,7 +83,7 @@ export default function SetupPage() {
 
       const campaign = await response.json();
       console.log('Campaign created:', campaign);
-      router.push(`/upload/${campaign.id}`);
+      router.push('/');
     } catch (err) {
       console.error('Error creating campaign:', err);
       setError(err instanceof Error ? err.message : 'Failed to create campaign');
@@ -93,7 +94,15 @@ export default function SetupPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Setup Birthday Campaign</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Setup Birthday Campaign</h1>
+        <Link
+          href="/"
+          className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+        >
+          Back to Home
+        </Link>
+      </div>
       
       {error && (
         <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
