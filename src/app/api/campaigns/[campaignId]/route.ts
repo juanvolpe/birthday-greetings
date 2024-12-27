@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { campaigns } from '@/data/mockData';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { campaignId: string } }
-): Promise<NextResponse> {
+type Props = {
+  params: {
+    campaignId: string;
+  };
+};
+
+export async function GET(_: NextRequest, props: Props) {
   try {
-    const campaign = campaigns.find(c => c.id === params.campaignId);
+    const campaign = campaigns.find(c => c.id === props.params.campaignId);
     
     if (!campaign) {
       return NextResponse.json(
@@ -24,13 +27,10 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { campaignId: string } }
-): Promise<NextResponse> {
+export async function PATCH(request: NextRequest, props: Props) {
   try {
     const data = await request.json();
-    const campaignIndex = campaigns.findIndex(c => c.id === params.campaignId);
+    const campaignIndex = campaigns.findIndex(c => c.id === props.params.campaignId);
     
     if (campaignIndex === -1) {
       return NextResponse.json(
