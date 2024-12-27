@@ -16,9 +16,16 @@ export default function SetupPage() {
 
     const formData = new FormData(event.currentTarget);
     const campaignName = formData.get('campaignName')?.toString().trim();
+    const birthdayPersonName = formData.get('birthdayPersonName')?.toString().trim();
 
     if (!campaignName) {
       setError('Campaign name is required');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!birthdayPersonName) {
+      setError('Birthday person name is required');
       setIsSubmitting(false);
       return;
     }
@@ -31,7 +38,7 @@ export default function SetupPage() {
         },
         body: JSON.stringify({
           birthdayPerson: {
-            name: campaignName,
+            name: birthdayPersonName,
             dateOfBirth: formData.get('dateOfBirth') || new Date().toISOString().split('T')[0],
           },
           gatherer: {
@@ -39,6 +46,7 @@ export default function SetupPage() {
             email: formData.get('gathererEmail') || '',
           },
           invitedEmails: formData.get('invitedEmails')?.toString().split(',').map(email => email.trim()).filter(Boolean) || [],
+          name: campaignName,
         }),
       });
 
@@ -78,6 +86,37 @@ export default function SetupPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Birthday Person Info */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-gray-900">Birthday Person Information</h3>
+              
+              <div>
+                <label htmlFor="birthdayPersonName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="birthdayPersonName"
+                  name="birthdayPersonName"
+                  required
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter the birthday person's name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
+                  Birthday Date
+                </label>
+                <input
+                  type="date"
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+              </div>
+            </div>
+
             {/* Campaign Name */}
             <div>
               <label htmlFor="campaignName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -89,20 +128,7 @@ export default function SetupPage() {
                 name="campaignName"
                 required
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter the birthday person's name"
-              />
-            </div>
-
-            {/* Birthday Date */}
-            <div>
-              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
-                Birthday Date
-              </label>
-              <input
-                type="date"
-                id="dateOfBirth"
-                name="dateOfBirth"
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                placeholder="Enter a name for this campaign"
               />
             </div>
 
