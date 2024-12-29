@@ -121,13 +121,9 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <motion.aside 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="w-80 bg-white min-h-screen shadow-xl fixed left-0 top-0 overflow-y-auto"
-        >
+      <div className="flex flex-col md:flex-row">
+        {/* Sidebar - hidden on mobile */}
+        <div className="hidden md:block md:w-64">
           <div className="p-8">
             <div className="mb-8">
               <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-2">
@@ -189,29 +185,32 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </motion.aside>
+        </div>
 
-        {/* Main Content */}
-        <main className="flex-1 ml-80">
+        {/* Main content - full width on mobile */}
+        <div className="flex-1">
           <div className="container mx-auto px-8 py-12">
             <motion.div 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex justify-between items-center mb-12"
+              className="mb-12"
             >
-              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+              {/* Title */}
+              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-6">
                 Birthday Campaigns
               </h1>
-              <div className="flex gap-4">
+              
+              {/* Buttons - stacked on mobile, side by side on larger screens */}
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/admin"
-                  className="px-6 py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="px-6 py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg text-center"
                 >
                   Admin
                 </Link>
                 <Link
                   href="/setup"
-                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg text-center"
                 >
                   Create New Campaign
                 </Link>
@@ -350,7 +349,7 @@ export default function HomePage() {
               </div>
             )}
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );

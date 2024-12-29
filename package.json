@@ -26,5 +26,10 @@
     "eslint-config-next": "latest",
     "postcss": "latest",
     "tailwindcss": "latest"
-  }
+  },
+  "description": "A web application for creating and sharing birthday greetings with friends and family.",
+  "main": "next.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
